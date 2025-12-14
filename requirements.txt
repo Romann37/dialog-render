@@ -13,3 +13,4 @@ rich
 tenacity
 validators
 requests
+openai
