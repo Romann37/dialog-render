@@ -3,9 +3,16 @@ sentence-transformers
 numpy
 pandas
 scikit-learn
-blinker
 aiofiles
 python-dotenv
+openai
+python-docx
+PyPDF2
+duckduckgo-search
+easyocr
+pdf2image
+sqlite3
+blinker
 watchdog
 altair
 pyarrow
@@ -13,5 +20,6 @@ rich
 tenacity
 validators
 requests
-openai
-python-docx
+Pillow
+
+
