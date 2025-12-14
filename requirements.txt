@@ -5,3 +5,9 @@ pandas
 scikit-learn
 blinker
 aiofiles
+watchdog
+altair
+pyarrow
+rich
+tenacity
+validators
