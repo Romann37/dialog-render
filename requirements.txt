@@ -14,3 +14,4 @@ tenacity
 validators
 requests
 openai
+python-docx
