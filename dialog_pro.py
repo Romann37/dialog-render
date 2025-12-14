@@ -121,18 +121,18 @@ class OpenRouterClient:
 client = OpenRouterClient()
 
 
-@st.cache_resource  # КЭШИРУЕМ МОДЕЛЬ!
-def load_embedding_model():
-    st.info('🔄 Загрузка multilingual модели (30 сек)...')
-    model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
-    st.success('✅ Модель готова!')
-    return model
+#@st.cache_resource  # КЭШИРУЕМ МОДЕЛЬ!
+#def load_embedding_model():
+#    st.info('🔄 Загрузка multilingual модели (30 сек)...')
+#    model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+#    st.success('✅ Модель готова!')
+#    return model
 
 
 class VectorKnowledgeBase:
     def __init__(self, db_path: str) -> None:
         self.db_path = db_path
-        self.model = load_embedding_model()
+#        self.model = load_embedding_model()
         self.init_db()
         self.chunks, self.embeddings = self._load_chunks()
 
@@ -347,10 +347,13 @@ def main() -> None:
 
     st.title(f"🤖 {CONFIG['app_name']}")
     st.markdown("---")
-    with st.spinner('🔄 Инициализация AI...'):
-        kb = VectorKnowledgeBase(CONFIG['db_path'])
-    st.success('✅ Готово к работе!')
     
+    # ← ВСТАВЬТЕ ВНУТРИ main():
+    st.success('✅ Готово к работе!')
+    class DummyKB:
+        def search(self, query): 
+            return ""
+    kb = DummyKB()  # ← kb используется в ask_ai()
 
     with st.sidebar:
         st.header("📁 Документы")
