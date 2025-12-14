@@ -1,9 +1,6 @@
-streamlit>=1.38.0
-sentence-transformers>=3.0.1
-torch>=2.5.0
-torchvision>=0.20.0
-numpy>=2.0.0
-pandas
-scikit-learn
-
+streamlit==1.36.0
+sentence-transformers==3.0.1
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.1
 
