@@ -124,7 +124,7 @@ client = OpenRouterClient()
 @st.cache_resource  # КЭШИРУЕМ МОДЕЛЬ!
 def load_embedding_model():
     st.info('🔄 Загрузка multilingual модели (30 сек)...')
-    model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', device='cpu')
+    model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
     st.success('✅ Модель готова!')
     return model
 
