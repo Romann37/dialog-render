@@ -11,7 +11,6 @@ PyPDF2
 duckduckgo-search
 easyocr
 pdf2image
-sqlite3
 blinker
 watchdog
 altair
@@ -21,5 +20,6 @@ tenacity
 validators
 requests
 Pillow
+
 
 
