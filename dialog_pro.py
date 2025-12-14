@@ -121,12 +121,12 @@ class OpenRouterClient:
 client = OpenRouterClient()
 
 
-@lru_cache(maxsize=1)
-def load_embedding_model() -> SentenceTransformer:
-    return SentenceTransformer(
-        CONFIG["embedding_model"],
-        device="cpu",
-    )
+@st.cache_resource  # КЭШИРУЕМ МОДЕЛЬ!
+def load_embedding_model():
+    st.info('🔄 Загрузка multilingual модели (30 сек)...')
+    model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2', device='cpu')
+    st.success('✅ Модель готова!')
+    return model
 
 
 class VectorKnowledgeBase:
@@ -347,6 +347,10 @@ def main() -> None:
 
     st.title(f"🤖 {CONFIG['app_name']}")
     st.markdown("---")
+    with st.spinner('🔄 Инициализация AI...'):
+        kb = VectorKnowledgeBase(CONFIG['db_path'])
+    st.success('✅ Готово к работе!')
+    
 
     with st.sidebar:
         st.header("📁 Документы")
