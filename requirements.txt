@@ -5,9 +5,11 @@ pandas
 scikit-learn
 blinker
 aiofiles
+python-dotenv
 watchdog
 altair
 pyarrow
 rich
 tenacity
 validators
+requests
