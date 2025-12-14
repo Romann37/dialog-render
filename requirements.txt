@@ -3,4 +3,5 @@ sentence-transformers
 numpy
 pandas
 scikit-learn
-
+blinker
+aiofiles
