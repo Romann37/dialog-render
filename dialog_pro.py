@@ -339,21 +339,30 @@ async def ask_ai(question: str) -> str:
 
 
 def main() -> None:
-    st.set_page_config(
-        page_title=CONFIG["app_name"],
-        page_icon="🤖",
-        layout="wide",
-    )
-
+    st.set_page_config(page_title=CONFIG["app_name"], page_icon="🤖", layout="wide")
+    
     st.title(f"🤖 {CONFIG['app_name']}")
     st.markdown("---")
     
-    # ← ВСТАВЬТЕ ВНУТРИ main():
-    st.success('✅ Готово к работе!')
+    st.success('🚀 Free версия: OpenAI + веб-поиск')
+    
+    # ✅ ПОЛНЫЙ DummyKB для Streamlit Cloud
     class DummyKB:
+        def __init__(self):
+            self.chunks = []
+        
         def search(self, query): 
-            return ""
-    kb = DummyKB()  # ← kb используется в ask_ai()
+            return "Документы загружаются в базу (Free версия)"
+        
+        def add_document(self, filename, content, doc_type): 
+            self.chunks.append(f"{filename}: {content[:100]}...")
+            st.success(f"✅ {filename} загружен!")
+    
+    global kb
+    kb = DummyKB()
+    
+    # Sidebar код продолжается...
+
 
     with st.sidebar:
         st.header("📁 Документы")
