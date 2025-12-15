@@ -343,55 +343,39 @@ def main() -> None:
     
     st.title(f"🤖 {CONFIG['app_name']}")
     st.markdown("---")
+    st.success('🚀 Free версия готова!')
     
-    st.success('🚀 Free версия: OpenAI + веб-поиск')
-    
-    # ✅ ПОЛНЫЙ DummyKB
     class DummyKB:
-        def __init__(self):
-            self.chunks = []
-        def search(self, query): 
-            return "Документы загружаются в базу (Free версия)"
+        def __init__(self): self.chunks = []
+        def search(self, query): return "Документы загружены (Free)"
         def add_document(self, filename, content, doc_type): 
-            self.chunks.append(f"{filename}: {content[:100]}...")
-            st.success(f"✅ {filename} загружен!")
+            self.chunks.append(filename); st.success(f"✅ {filename}")
     
-    global kb
-    kb = DummyKB()
+    global kb; kb = DummyKB()
     
-    # Sidebar
     with st.sidebar:
-        st.header("📁 Документы")
-        uploaded_files = st.file_uploader(
-            "Загрузить документы",
-            accept_multiple_files=True,
-            type=["txt", "pdf", "png", "jpg", "jpeg"],
-        )
-        if uploaded_files:
-            for file in uploaded_files:
-                st.success(f"✅ {file.name} готов к обработке!")
-        
-        st.header("🌐 Интернет-поиск")
-        use_web_search = st.checkbox("Использовать интернет‑поиск", value=True)
-        st.session_state.use_web_search = use_web_search
-        
-        st.header("⚙️ Настройки")
-        st.info("Чанков в базе: 0 (Free версия)")
-        st.info("🗑️ База очищается автоматически")
+        st.header("📁 Файлы")
+        st.file_uploader("PDF/TXT", accept_multiple_files=True)
+        st.checkbox("🌐 Веб-поиск", value=True)
     
-    # ✅ ОСНОВНОЙ БЛОК С ПОЛЕМ ВОПРОСА (ОТСУТСТВОВАЛ!)
     col1, col2 = st.columns([3, 1])
-    
     with col1:
-        question = st.text_area("❓ Задайте вопрос по документам:", height=100)
-    
+        question = st.text_area("❓ Вопрос:", height=100)
     with col2:
-        if st.button("🚀 Спросить ИИ", type="primary", use_container_width=True):
+        if st.button("🚀 Спросить ИИ", type="primary"):
             if question:
-                st.info("🤖 OpenAI работает (добавьте OPENAI_API_KEY в Secrets)")
-                st.success("✅ Готово! Ответ через OpenRouter.")
+                with st.spinner("🤖 ИИ отвечает..."):
+                    answer = asyncio.run(ask_ai(question))
+                st.markdown("### ✅ Ответ ИИ:")
+                st.success(answer)
+                st.session_state.last_answer = answer
             else:
-                st.warning("Введите вопрос.")
+                st.warning("Введите вопрос!")
+    
+    if "last_answer" in st.session_state:
+        st.markdown("### 📋 Последний ответ:")
+        st.info(st.session_state.last_answer)
+
 
 
 if __name__ == "__main__":
