@@ -412,7 +412,11 @@ def main() -> None:
         st.session_state.web_max_results = int(web_max_results)
 
         st.header("⚙️ Настройки")
-        st.info(f"Чанков в базе: {len(kb.chunks)}")
+        # Безопасная проверка для Streamlit Cloud
+try:
+    st.info(f"Чанков в базе: {len(kb.chunks)}")
+except:
+    st.info("🚀 База знаний готова (Free версия)")
 
         if st.button("🗑️ Очистить базу знаний"):
             conn = sqlite3.connect(CONFIG["db_path"])
