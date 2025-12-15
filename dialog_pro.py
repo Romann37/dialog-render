@@ -418,13 +418,8 @@ try:
 except:
     st.info("🚀 База знаний готова (Free версия)")
 
-        if st.button("🗑️ Очистить базу знаний"):
-            conn = sqlite3.connect(CONFIG["db_path"])
-            conn.execute("DELETE FROM chunks")
-            conn.commit()
-            conn.close()
-            kb.chunks, kb.embeddings = [], np.array([])
-            st.success("База очищена!")
+        # Кнопка очистки отключена для Streamlit Cloud
+    st.info("🗑️ База очищается автоматически")
 
     col1, col2 = st.columns([3, 1])
 
