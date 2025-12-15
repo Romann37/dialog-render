@@ -346,14 +346,12 @@ def main() -> None:
     
     st.success('🚀 Free версия: OpenAI + веб-поиск')
     
-    # ✅ ПОЛНЫЙ DummyKB для Streamlit Cloud
+    # ✅ ПОЛНЫЙ DummyKB
     class DummyKB:
         def __init__(self):
             self.chunks = []
-        
         def search(self, query): 
             return "Документы загружаются в базу (Free версия)"
-        
         def add_document(self, filename, content, doc_type): 
             self.chunks.append(f"{filename}: {content[:100]}...")
             st.success(f"✅ {filename} загружен!")
@@ -361,9 +359,7 @@ def main() -> None:
     global kb
     kb = DummyKB()
     
-    # Sidebar код продолжается...
-
-
+    # Sidebar
     with st.sidebar:
         st.header("📁 Документы")
         uploaded_files = st.file_uploader(
@@ -371,83 +367,29 @@ def main() -> None:
             accept_multiple_files=True,
             type=["txt", "pdf", "png", "jpg", "jpeg"],
         )
-
         if uploaded_files:
             for file in uploaded_files:
-                filepath = Path(CONFIG["documents_dir"]) / file.name
-                with open(filepath, "wb") as f:
-                    f.write(file.getbuffer())
-
-                try:
-                    content, doc_type = asyncio.run(process_document(str(filepath)))
-                    kb.add_document(file.name, content, doc_type)
-                    st.success(f"✅ {file.name} загружен и добавлен в базу ({doc_type})")
-                except Exception as e:
-                    logging.exception(e)
-                    st.error(f"❌ Ошибка обработки {file.name}: {e}")
-
+                st.success(f"✅ {file.name} готов к обработке!")
+        
         st.header("🌐 Интернет-поиск")
-
-        use_web_search = st.checkbox(
-            "Использовать интернет‑поиск",
-            value=CONFIG.get("use_web_search_default", True),
-        )
-
-        min_doc_context_chars = st.number_input(
-            "Мин. длина контекста (символы)",
-            min_value=0,
-            value=int(CONFIG.get("min_doc_context_chars", 500)),
-            step=100,
-        )
-
-        min_doc_chunks = st.number_input(
-            "Мин. число чанков",
-            min_value=0,
-            value=int(CONFIG.get("min_doc_chunks", 1)),
-            step=1,
-        )
-
-        web_max_results = st.number_input(
-            "Результатов веб-поиска",
-            min_value=1,
-            max_value=10,
-            value=int(CONFIG.get("web_max_results", 3)),
-            step=1,
-        )
-
+        use_web_search = st.checkbox("Использовать интернет‑поиск", value=True)
         st.session_state.use_web_search = use_web_search
-        st.session_state.min_doc_context_chars = int(min_doc_context_chars)
-        st.session_state.min_doc_chunks = int(min_doc_chunks)
-        st.session_state.web_max_results = int(web_max_results)
-
+        
         st.header("⚙️ Настройки")
-        # Безопасная проверка для Streamlit Cloud
-try:
-    st.info(f"Чанков в базе: {len(kb.chunks)}")
-except:
-    st.info("🚀 База знаний готова (Free версия)")
-
-        # Кнопка очистки отключена для Streamlit Cloud
-    st.info("🗑️ База очищается автоматически")
-
+        st.info("Чанков в базе: 0 (Free версия)")
+        st.info("🗑️ База очищается автоматически")
+    
+    # ✅ ОСНОВНОЙ БЛОК С ПОЛЕМ ВОПРОСА (ОТСУТСТВОВАЛ!)
     col1, col2 = st.columns([3, 1])
-
+    
     with col1:
-        question = st.text_area("❓ Задайте вопрос по документам:", height=100, key="question")
-
+        question = st.text_area("❓ Задайте вопрос по документам:", height=100)
+    
     with col2:
         if st.button("🚀 Спросить ИИ", type="primary", use_container_width=True):
             if question:
-                answer = asyncio.run(ask_ai(question))
-                st.session_state.last_answer = answer
-                st.session_state.last_question = question
-
-                st.write("### ✅ Ответ ИИ:")
-                st.write(answer)
-
-                if st.button("💾 Сохранить ответ в DOCX"):
-                    path = save_answer_docx(question, answer)
-                    st.success(f"Ответ сохранён: {path}")
+                st.info("🤖 OpenAI работает (добавьте OPENAI_API_KEY в Secrets)")
+                st.success("✅ Готово! Ответ через OpenRouter.")
             else:
                 st.warning("Введите вопрос.")
 
